@@ -1,0 +1,375 @@
+---
+title: "Lab 7"
+author: "Your Name"
+date: "10/7/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Instructions Before Beginning
+
+1.  For this assignment, do **not** switch to the visual markdown editor.
+        -   It doesn't work well when interacting heavily with GitHub!
+2.  Select the **Files** tab (bottom right window of RStudio), and check the box for `lastname_firstname_lab_07.Rmd`.
+        - Then click **Rename**, and replace `lastname_firstname` with your last and first name, then click OK.
+3.  At the top of the document for `author: "Your Name"`, replace `"Your Name"` with your actual name. NOTE: There must be one space after `author:` and your name must be in quotation marks.
+4. Click Knit. The HTML preview should open in the Viewer tab (bottom right of RStudio, or a new window might open).
+        - This will allow you to read a "clean" version of the document while you work through the RMarkdown document.
+        - Alternatively, you can open the html file in a Web browser.
+5.  Read the following introductory paragraph on GWAS, and then follow the instructions to complete the assignment.
+
+
+## Genome-Wide Association Studies (GWAS)
+
+[Genome-Wide association studies (GWAS)](https://en.wikipedia.org/wiki/Genome-wide_association_study) are often used to look for correlations between single-nucleotide polymorphisms (SNPs) and phenotypic traits. Any type of trait with an underlying genetic basis can be investigated using GWAS. In humans, GWAS has been used to help identify genes responsible for various phenotypic traits (e.g. height), health issues (e.g. hypertension), cancer risk, and much more. GWAS was even used to identify candidate loci responsible for making cilantro taste bitter and soapy for individuals who inherited that trait.
+
+Although GWAS is a promising tool for biomedical research with the potential to improve human health, there are numerous concerns regarding potential misuse of genetic information by malicious actors. GWAS studies in humans raise critical ethical implications for issues such as medical privacy, the threat of discrimination, and many other issues.
+
+GWAS is also used in many other non-human organisms. In plants, GWAS has been used to identify candidate loci responsible for traits such as plant growth and branching patterns, metabolic pathways, and countless other traits. It should be noted that GWAS studies merely detect *associations* between genetic variation and phenotypic variation, and therefore GWAS cannot yield definitive, causal results. Instead, GWAS studies can help identify genomic regions that might be responsible for certain phenotypes (i.e., GWAS can help generate hypotheses for further investigation).
+
+This GWAS example is adapted from [Manhattan plot in R: a review](https://www.r-graph-gallery.com/101_Manhattan_plot.html) (by [Holtz Yan](https://github.com/holtzy/) for the [R graph gallery](https://www.r-graph-gallery.com/)).
+
+The GitHub lesson is adapted from Dr. Lisa Lendway's video [Using Git and GitHub in R](https://www.youtube.com/watch?v=megZYkCLMA4).
+
+## Problems
+
+1.  The results of GWAS are often visualized in a type of plot called Manhattan plots. In R, the package `qqman` can be used to generate Manhattan plots. Install the package `qqman` (if you haven't already). After installing the package, load the package in the code chunk below. (NOTE: After installing, do not include the code to install the package in the code chunk -- just load it).
+
+```{r warning=FALSE, message = FALSE}
+
+```
+
+2.  Save this document, but DO NOT KNIT.
+      - Next, click the Git tab, and Commit and Push your changes.
+      - Refresh your GitHub repository, and make sure the changes were successfully pushed to GitHub.
+3.  At this point, you have the option to pair up with a classmate, or work by yourself.
+      - Working with a partner is optional, but highly encouraged.
+4.  If you are working **WITH** a partner, proceed with \#5 now.
+      - If you are working **by yourself, scroll down to line 200**.
+      - You will see the section that says "**If working WITHOUT a partner**".
+      - Additionally, scroll down in the Viewer pane (or web browser) to the section that says "**If working WITHOUT a partner**"
+      
+---
+      
+5.  Find a partner to work with now. You'll need to be next to each other, and you'll both need to be on a separate computer.
+     - For the following instructions, one of you will be referred to **Partner \#1**, and the other will be **Partner \#2** (it doesn't matter who is who).
+     - Go ahead and decide who will take on each role.
+     - Complete the following assignment together as instructted.
+     - **IMPORTANT: Do not skip ahead** -- wait for your partner before moving on to the next problem.
+6.  **Partner \#1 only**: At the top of the document, add your partner's name on the author line.
+      - Example: `author: Eric Goolsby and Partner 2 Name`
+7.  **Partner \#1 only**: Add your partner as a collaborator to your Lab 7 repository.
+8.  **Partner \#2 only**: After being added as a collaborator, clone your partner's repository to your own computer from RStudio (New Project --\> Version Control --\> etc).
+     - Then open their lab_07.Rmd document from the files pane (bottom right) or RStudio.
+9.  **Partner \#2 only**: Complete the following problem and read the text afterwards.
+
+The `qqman` package includes simulated results from a GWAS experiment in an object named `gwasResults`. In the code chunk below, use the `head` function to visualize the first few rows of `gwasResults`.
+
+```{r}
+
+```
+
+-   The first column is named `SNP`. SNP names are typically uninterpretable -- they are simply numbered in order as they occur throughout the genome.
+-   The second column is `CHR`, which corresponds to the chromosome number in which the SNP is located.
+-   The third column is `BP`, which corresponds to the column name from the output of genomics software named `PLINK` (you can ignore this column).
+-   The fourth column is `P`, which is the p-value for the association between an individual SNP and a trait. For instance, imagine a GWAS study in plants.
+      - If a SNP had either an `A` or a `C` at a particular site in the genome of the individuals in the GWAS study, and if all of the individuals with an `A` had blue flowers, and all of the individuals with a `C` had white flowers, then the p-value would be very low, which would indicate that this SNP might be associated with the flower color.
+      - On the other hand, if there was no correlation between `A` and `C` vs the trait of interest, then the p-value would be large, and we would conclude that there is no association between that SNP and the trait.
+
+10. **Partner \#2 only**: After completing the above problem:
+
+    -   Save the document, but DO NOT KNIT.
+    -   Click Git, then Commit and Push.
+    -   Be sure the changes are reflected on GitHub.
+
+11. **Partner \#1 only**: Click the Pull button from the Git tab (blue down arrow). You should see that the problem under \#9 is now completed.
+
+12. **EVERYONE**: Complete the problem below on your own computer, and read the text.
+
+We can visualize the P-values for each SNP using a Manhattan plot for our simluated dataset `gwasResults` using the code below. Un-comment the code and run it to generate the Manhattan plot
+
+```{r}
+#manhattan(gwasResults, chr="CHR", bp="BP", snp="SNP", p="P" )
+```
+
+The SNPs are arranged in order of their position of each chromosome on the x-axis, where the chromosome numbers are indicated. The y-axis is the negative log-10 of the p-value. By taking the negative logarithm, we can see the p-values that were extremely close to zero -- the lower the p-value, the higher the negative logarithm on the Manhattan plot.
+
+13. **EVERYONE**: When finished, save (do not Knit), commit, and push.
+
+    -   This will create a merge conflict for the last person to push, and the push will fail!
+
+14. **For the person who failed to push only**: To resolve the conflict, Pull (blue down arrow), then Push again. **For the other person, be sure to look on as your partner resolves the conflict**.
+
+    -   If you both made identical changes, then the push will be successful and you can move on to the next problem.
+    -   If the changes were different, then you will need to resolve the conflict:
+        -   To resolve the conflict, look at the code chunk below \#12.
+        -   You will see something like the following:
+            -   `<<<<<<< HEAD`
+            -   `the code from one of the partners`
+            -   `=======`
+            -   `the code from the other partner`
+            -   `>>>>>>> 33c53ed2270d6d6184eb4b7f620948cddb5c47c4`
+    -   Choose which version of the code you want to keep, and delete the other version.
+    -   Also delete the lines with `<<<< HEAD` and `=====` and `>>>>>>> 33c53ed22`
+    -   Now, Commit and Push (it should work this time).
+
+15. **EVERYONE** Once you have resolved the issue, click the Pull button to make sure you have the most up-to-date version of the file.
+
+16. **Partner \#1 only** Complete the following, and look at the results.
+
+Suppose we are interested in a particular region of the genome because we know from previous studies that it is involved in a pathway responsible for flower pigment production in other plant species. We have generated list of those SNP names below. Uncomment the code below and run it to see our SNPs of interest:
+
+```{r}
+#snps <- paste("rs",9500:9520,sep="")
+#snps
+```
+
+17. **Partner \#1 only** When finished, Save (do not Knit), commit, and push.
+
+18. **Partner \#2 only**: Skip the previous code chunk, and complete the following, and examine the plot. (do NOT Pull first):
+
+Now let's plot our SNPs of interest.
+
+```{r}
+#snps <- paste("rs",9500:9520,sep="")
+#manhattan(gwasResults, highlight = snps)
+```
+
+It doesn't appear this region has any significant associations.
+
+19. **Partner \#2 only**: When finished, save (do not Knit), commit, and push.
+
+    -   The push will fail. Resolve the conflict:
+    -   All you have to do is Pull, then Push.
+    -   That's because you edited different lines of code, so there was no conflict.
+
+20. **EVERYONE**: After the above conflicts are resolved, Pull (blue down arrow) the latest version from GitHub.
+
+21. **EVERYONE**: Complete the following, and examine the output. **IMPORTANT: Be sure to make the code chunk slightly different from your partner's code**. For instance, you can add a comment after the first line with `#` and write your name afterwards.
+
+The `qqman` package has its on SNPs of interest variable, stored in `snpsOfInterest`. In the code chunk below, enter `snpsOfInterest` on a line by itself to print these SNP names. Then on the next line, using the code from \#5, but replace `snps` with `snpsOfInterest`
+
+```{r}
+
+```
+
+22. **EVERYONE** Save (do not Knit), complete, and push.
+
+    -   For one of you, the push will fail.
+    -   Resolve the merge conflict (the other person should observe):
+    -   To resolve the conflict, look at the code chunk below \#21.
+        -   You will see something like the following:
+            -   `<<<<<<< HEAD`
+            -   `the code from one of the partners`
+            -   `=======`
+            -   `the code from the other partner`
+            -   `>>>>>>> 33c53ed2270d6d6184eb4b7f620948cddb5c47c4`
+    -   Choose which version of the code you want to keep, and delete the other version.
+    -   Also delete the lines with `<<<< HEAD` and `=====` and `>>>>>>> 33c53ed22`
+    -   Now, Commit and Push (it should work this time).
+
+23. **EVERYONE** After resolving the conflict and the push is successful, click the Pull button (blue down arrow).
+
+24. **Partner \#1** Knit the document. If there are any errors when Knitting, resolve those.
+
+    -   After successfully Knitting, Commit and Push your changes.
+
+25. **Partner \#2** Click the Pull button (blue down arrow) again.
+
+26. In GitHub, you are (by default) working on the "main" branch of the repository. However, you can have multiple branches, which allows you to have different versions of your files. Maybe you want to have a "development" branch in addition to the "main" branch. Maybe the "dev" branch is where you write new code that you haven't tested yet, and you only add it to the "main" branch once you've thoroughly tested the code and confirmed that it works (this is a common practice in software development).
+
+      -   **Partner \#1**: Under the Git tab, click the New Branch button.
+            -   It's the button that's to the right of the blue gear button, and to the left of the "main" button.
+            -   The button consists of two (small) purple rectangles branching out from a small white diamond.
+            -   Give the new branch a name. You can call it whatever you want, but I suggest "dev", or maybe you want to add your name (e.g. "eric_dev")
+            -   After you've typed a name, click Create.
+            -   Then, Commit and Push.
+
+27. **Partner \#2** From RStudio, Pull (blue down arrow) the changes. Then, click "main" to see the drop-down menu, and switch over to the new branch your partner created. Then, make a small change by simply typing the word "complete" right here --> (then, Save, Commit, and Push)
+
+28. **Partner \#1** Click Pull (blue down arrow). Then, on GitHub, refresh the page. You'll see a message at the top of your repository, letting you know that there were changes on a different branch. Let's assume you want to merge the changes from the new branch into the main branch. To do that, Click "Compare & pull request", then type a brief message explaining what the change was, then click Create Pull Request. Then, click Merge Pull Request, and then you can delete the new branch (if desired -- I typically don't delete branches!).
+      -   This should work without any conflicts, but in real-life collaborations, you might have to resolve conflicts before you can merge the two branches. We won't go over that, but it's very similar to how we resolved conflicts in the above problems (although it's best to try to avoid such conflicts if possible!).
+      
+29. Now we're going to use GitHub to help us recover old version of the file. Depending on whether you've 1) saved only, 2) saved and committed only, or 3) saved, committed, and pushed, then there are different options for recovering older versions of your files. We'll start off with the first case, in which you save something by mistake, and you want to revert your file back. **EVERYONE**: Type your name here -->   (then Save, then right-click on the file under the Git tab, and click revert. Your name should then disappear.)
+
+30. **EVERYONE**: Now let's try the second situation. Type your name here -->   (then Save and Commit, but don't Push!)
+
+31. **EVERYONE**: To undo a commit, click on Terminal (next to Console, bottom right pane of RStudio -- or, click Tools --> Terminal --> New Terminal). In the Terminal, type `git reset HEAD~1` (without the quotation marks). The commit will undo, but your changes are still there. You'll have to either use Undo (Ctrl Z) to undo the changes, or you'll have to manually correct your mistake. In this example, you can just delete your name from question 30. Then, you can commit whatever changes you want.
+
+32. **Partner \#1**: Enter your name here -->  (then Save, Commit, and Push). 
+
+33. **Partner \#2**: Pull the changes your partner just made.
+
+34. **Partner \#2**: Suppose you want to revert to the state BEFORE the name was entered on problem 32. From RStudio, under the Git tab, click on the History (clock) button. It will bring up a list of all of your commits. The most recent commit (at the very top of the list) is the one you want to undo. Look at the SHA number. You can either manually type it, or you can copy the longer version that can be found under the list of commits. Go to the terminal, and type `git revert SHA` (without quotation marks -- ALSO, replace "SHA" with the SHA for the commit -- it should be a random string of numbers and letters). Once you hit Enter, the name should disappear from 32. (You can exit the terminal now). Now, you can Commit and Push, and it will restore the repository to the previous version.
+
+35. **Partner \#1**: Pull the changes your partner just made.
+
+36. **EVERYONE**: Submit the .Rmd file and the HTML file for the Webcourses assignment. **Partner \#2** -- be sure to submit the collaborative version you and your partner were working on -- not the one you downloaded and didn't finish!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### If working WITHOUT a partner
+
+5.  If you're working alone, you will be playing the role of **Partner \#1**, and you will ALSO be playing the role of a collaborator, referred to as **GitHub Partner**.
+6.  When you are acting as **Partner \#1**, you will be working from your computer (as normal).
+7.  When you are acting as **GitHub Partner**, you will be editing the file FROM GITHUB. That way, you can still get the experience of "collaborating" and resolving merge conflicts.
+8.  **GitHub Partner only**: Go to the Lab 7 repository on GitHub. Click on the lab_07.Rmd file, and click the edit button (it looks like a pencil, at the top right of the document).
+9.  **GitHub Partner only**: FROM THE GITHUB EDITOR: Complete the following problem:
+
+The `qqman` package includes simulated results from a GWAS experiment in an object named `gwasResults`. In the code chunk below, use the `head` function to visualize the first few rows of `gwasResults`.
+
+```{r}
+
+```
+
+-   The first column is named `SNP`. SNP names are typically uninterpretable -- they are simply numbered in order as they occur throughout the genome.
+-   The second column is `CHR`, which corresponds to the chromosome number in which the SNP is located.
+-   The third column is `BP`, which corresponds to the column name from the output of genomics software named `PLINK` (you can ignore this column).
+-   The fourth column is `P`, which is the p-value for the association between an individual SNP and a trait. For instance, imagine a GWAS study in plants.
+      - If a SNP had either an `A` or a `C` at a particular site in the genome of the individuals in the GWAS study, and if all of the individuals with an `A` had blue flowers, and all of the individuals with a `C` had white flowers, then the p-value would be very low, which would indicate that this SNP might be associated with the flower color.
+      - On the other hand, if there was no correlation between `A` and `C` vs the trait of interest, then the p-value would be large, and we would conclude that there is no association between that SNP and the trait.
+
+10. **GitHub Partner only**: After completing the above problem:
+
+    -  Scroll to the bottom of the GitHub edit page, and click Commit.
+
+11. **Partner \#1 only**: Click the Pull button from the Git tab (blue down arrow). You should see that the problem under \#9 is now completed. Read the text, and take a look at the output from the code.
+
+12. **GitHub Partner only** Complete the problem below from the GitHub edit page, and then commit. Then, after committing on GitHub, do the same thing on your own computer as **Partner \#1 only** (but don't Pull first!). Then look at the plot, and read the text.
+
+We can visualize the P-values for each SNP using a Manhattan plot for our simluated dataset `gwasResults` using the code below. Un-comment the code and run it to generate the Manhattan plot
+
+```{r}
+#manhattan(gwasResults, chr="CHR", bp="BP", snp="SNP", p="P" )
+```
+
+The SNPs are arranged in order of their position of each chromosome on the x-axis, where the chromosome numbers are indicated. The y-axis is the negative log-10 of the p-value. By taking the negative logarithm, we can see the p-values that were extremely close to zero -- the lower the p-value, the higher the negative logarithm on the Manhattan plot.
+
+13. **Partner \#1 only**: When finished, save (do not Knit), commit, and push.
+
+    -   This will create a merge conflict, and the push will fail!
+
+14. **Partner \#1 only**: To resolve the conflict, Pull (blue down arrow), then Push again.
+
+    -   If you made identical changes on your computer and on GitHub, then the Pull/push will be successful and you can move on to the next problem.
+    -   If this fails, that means the changes were different, and you will need to resolve the conflict:
+        -   To resolve the conflict, look at the code chunk for \#12.
+        -   You will see something like the following:
+            -   `<<<<<<< HEAD`
+            -   `the code from one of the partners`
+            -   `=======`
+            -   `the code from the other partner`
+            -   `>>>>>>> 33c53ed2270d6d6184eb4b7f620948cddb5c47c4`
+    -   Choose which version of the code you want to keep, and delete the other version.
+    -   Also delete the lines with `<<<< HEAD` and `=====` and `>>>>>>> 33c53ed22`
+    -   Now, Commit and Push (it should work this time).
+
+15. **Partner \#1 only** Once you have resolved the issue, click the Pull button to make sure you have the most up-to-date version of the file. (This is probably unnecessary, but do it just in case!)
+
+16. **GitHub Partner only** From GitHub, read and complete the following.
+
+Suppose we are interested in a particular region of the genome because we know from previous studies that it is involved in a pathway responsible for flower pigment production in other plant species. We have generated list of those SNP names below. Uncomment the code below and run it to see our SNPs of interest:
+
+```{r}
+#snps <- paste("rs",9500:9520,sep="")
+#snps
+```
+
+17. **GitHub Partner only** When finished, commit the changes (from GitHub).
+
+18. **Partner \#1 only**: On your computer, DO NOT PULL. Instead, the above problem should still be incomplete on your computer. Go ahead and complete the following, and look at the output:
+
+Now let's plot our SNPs of interest.
+
+```{r}
+#snps <- paste("rs",9500:9520,sep="")
+#manhattan(gwasResults, highlight = snps)
+```
+
+It doesn't appear this region has any significant associations!
+
+19. **Partner \#1 only**: When finished, save (do not Knit), commit, and push.
+
+    -   The push will fail. Resolve the error:
+    -   All you have to do is Pull, then Push.
+    -   That's because you edited different lines of code on GitHub and on your computer, so there was no conflict.
+
+20. **Partner \#1 only**: After the above conflicts are resolved, Pull (blue down arrow) the latest version from GitHub (again, probably not necessary, but do it just in case)
+
+21. **Github Partner only**: Complete the following code chunk (from GitHub), and commit the changes. THEN, as **Partner \#1**, WITHOUT Pulling first, complete the code following code chunk (again), but this time, **be sure to make the code chunk slightly different from what you did on GitHub**. For instance, you can add a comment after the first line with `#` and write your name afterwards. Then run the code and examine the output.
+
+The `qqman` package has its on SNPs of interest variable, stored in `snpsOfInterest`. In the code chunk below, enter `snpsOfInterest` on a line by itself to print these SNP names. Then on the next line, using the code from \#5, but replace `snps` with `snpsOfInterest`
+
+```{r}
+
+```
+
+22. **Partner \#1 only** Save (do not Knit), complete, and push.
+
+    -   The push will fail!
+    -   You'll have to resolve the merge conflict.
+    -   To resolve the conflict, look at the code chunk below \#21.
+        -   You will see something like the following:
+            -   `<<<<<<< HEAD`
+            -   `the code from one of the partners`
+            -   `=======`
+            -   `the code from the other partner`
+            -   `>>>>>>> 33c53ed2270d6d6184eb4b7f620948cddb5c47c4`
+    -   Choose which version of the code you want to keep, and delete the other version.
+    -   Also delete the lines with `<<<< HEAD` and `=====` and `>>>>>>> 33c53ed22`
+    -   Now, Commit and Push (it should work this time).
+
+23. **Partner \#1 only** After resolving the conflict and the push is successful, click the Pull button (blue down arrow). (probably not necessary, but do it just in case!)
+
+24. **Partner \#1** Knit the document. If there are any errors when Knitting, resolve those.
+
+    -   After successfully Knitting, Commit and Push your changes.
+
+25. In GitHub, you are (by default) working on the "main" branch of the repository. However, you can have multiple branches, which allows you to have different versions of your files. Maybe you want to have a "development" branch in addition to the "main" branch. Maybe the "dev" branch is where you write new code that you haven't tested yet, and you only add it to the "main" branch once you've thoroughly tested the code and confirmed that it works (this is a common practice in software development).
+
+26. **Partner \#1**: Under the Git tab, click the New Branch button.
+            -   It's the button that's to the right of the blue gear button, and to the left of the "main" button.
+            -   The button consists of two (small) purple rectangles branching out from a small white diamond.
+            -   Give the new branch a name. You can call it whatever you want, but I suggest "dev", or maybe you want to add your name (e.g. "eric_dev")
+            -   After you've typed a name, click Create.
+            -   Then, Commit and Push.
+
+27. **GitHub Partner** Switch branches on your GitHub repository. Make a small change by simply typing the word "complete" right here -->  (then Commit your changes on GitHub).
+
+28. **Partner \#1** Click Pull (blue down arrow). Then, on GitHub, refresh the page. You'll see a message at the top of your repository, letting you know that there were changes on a different branch. Let's assume you want to merge the changes from the new branch into the main branch. To do that, Click "Compare & pull request", then type a brief message explaining what the change was, then click Create Pull Request. Then, click Merge Pull Request, and then you can delete the new branch (if desired -- I typically don't delete branches!).
+      -   This should work without any conflicts, but in real-life collaborations, you might have to resolve conflicts before you can merge the two branches. We won't go over that, but it's very similar to how we resolved conflicts in the above problems (although it's best to try to avoid such conflicts if possible!).
+      
+29. Now we're going to use GitHub to help us recover old version of the file. Depending on whether you've 1) saved only, 2) saved and committed only, or 3) saved, committed, and pushed, then there are different options for recovering older versions of your files. We'll start off with the first case, in which you save something by mistake, and you want to revert your file back. **Partner \#1**: Type your name here -->   (then Save, then right-click on the file under the Git tab, and click revert. Your name should then disappear.)
+
+30. **Partner \#1**: Now let's try the second situation. Type your name here -->   (then Save and Commit, but don't Push!)
+
+31. **Partner \#1**: To undo a commit, click on Terminal (next to Console, bottom right pane of RStudio -- or, click Tools --> Terminal --> New Terminal). In the Terminal, type `git reset HEAD~1` (without the quotation marks). The commit will undo, but your changes are still there. You'll have to either use Undo (Ctrl Z) to undo the changes, or you'll have to manually correct your mistake. In this example, you can just delete your name from question 30. Then, you can commit whatever changes you want.
+
+32. **Partner \#1**: Enter your name here -->  (then Save, Commit, and Push). 
+
+33. **Partner \#1**: Suppose you want to revert to the state BEFORE the name was entered on problem 32. From RStudio, under the Git tab, click on the History (clock) button. It will bring up a list of all of your commits. The most recent commit (at the very top of the list) is the one you want to undo. Look at the SHA number. You can either manually type it, or you can copy the longer version that can be found under the list of commits. 
+
+34. **Partner \#1**: Go to the terminal, and type `git revert SHA` (without quotation marks -- ALSO, replace "SHA" with the SHA for the commit -- it should be a random string of numbers and letters). Once you hit Enter, the name should disappear from 32. (You can exit the terminal now). 
+
+35. **Partner \#1**: Now, you can Commit and Push, and it will restore the repository to the previous version.
+
+36. Submit the .Rmd file and the HTML file for the Webcourses assignment.
