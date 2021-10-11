@@ -48,7 +48,7 @@ The GitHub lesson is adapted from Dr. Lisa Lendway's video [Using Git and GitHub
 3.  At this point, you have the option to pair up with a classmate, or work by yourself.
       - Working with a partner is optional, but highly encouraged.
 4.  If you are working **WITH** a partner, proceed with \#5 now.
-      - If you are working **by yourself, scroll down to line 200**.
+      - If you are working **by yourself, scroll down to line 250**.
       - You will see the section that says "**If working WITHOUT a partner**".
       - Additionally, scroll down in the Viewer pane (or web browser) to the section that says "**If working WITHOUT a partner**"
       
@@ -208,6 +208,26 @@ The `qqman` package has its on SNPs of interest variable, stored in `snpsOfInter
 35. **Partner \#1**: Pull the changes your partner just made.
 
 36. **EVERYONE**: Submit the .Rmd file and the HTML file for the Webcourses assignment. **Partner \#2** -- be sure to submit the collaborative version you and your partner were working on -- not the one you downloaded and didn't finish!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
